@@ -25,8 +25,11 @@ def load_trace(filepath):
 
     return trace
 
-def get_properties():
-    return {
+
+def evaluate_trace(trace):
+    results = {}
+
+    properties = {
         "one_lamp": mtl.parse(
             "G[0, 201] ((((red & ~yellow) & ~green) | (((~red & yellow) & ~green) | ((~red & ~yellow) & green))))"
         ),
@@ -68,10 +71,6 @@ def get_properties():
         ),
     }
 
-
-def evaluate_trace(trace, properties):
-    results = {}
-
     for property_name, formula in properties.items():
         result = formula(
             trace,
@@ -88,7 +87,6 @@ def evaluate_trace(trace, properties):
 
 
 def main():
-    properties = get_properties()
     all_results = []
 
     for number in range(1, 11):
@@ -98,8 +96,7 @@ def main():
         print(f"Checking {filename}...")
 
         trace = load_trace(filepath)
-
-        results = evaluate_trace(trace, properties)
+        results = evaluate_trace(trace)
 
         row = {
             "trace": filename,
@@ -107,6 +104,7 @@ def main():
         }
 
         all_results.append(row)
+
 
     results_df = pd.DataFrame(all_results)
 
